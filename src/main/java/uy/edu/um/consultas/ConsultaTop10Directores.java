@@ -1,74 +1,105 @@
 package uy.edu.um.consultas;
 
-import java.util.Arrays;
-
 import uy.edu.um.UMovieSystem;
 import uy.edu.um.entities.Movie;
 import uy.edu.um.entities.Person;
 import uy.edu.um.entities.Rating;
 import uy.edu.um.tad.heap.MyHeap;
 import uy.edu.um.tad.heap.MyHeapImpl;
-import uy.edu.um.tad.linkedlist.MyLinkedListImpl;
 import uy.edu.um.tad.linkedlist.MyList;
 
 public class ConsultaTop10Directores {
-    public static void ejecutar(UMovieSystem system){
+
+    public static void ejecutar(UMovieSystem system) {
         long inicio = System.currentTimeMillis();
 
-        MyHeap<DirectorMediana> heap = new MyHeapImpl<>(false);
+        MyHeap<DirectorMediana> heap = new MyHeapImpl<>(false); // max-heap
 
         MyList<Person> people = system.getPeople().values();
-        for(int i = 0; i < people.size(); i++){
+
+        for (int i = 0; i < people.size(); i++) {
             Person p = people.get(i);
             MyList<Integer> moviesDirected = p.getMoviesDirigidas();
 
-            if(moviesDirected.size() < 1 || moviesDirected.isEmpty()){
-                continue;
+            if (moviesDirected == null || moviesDirected.size() <= 1) continue;
+
+            int totalRatings = 0;
+            for (int j = 0; j < moviesDirected.size(); j++) {
+                Movie m = system.getMovies().get(moviesDirected.get(j));
+                if (m != null) {
+                    totalRatings += m.getSumRate();
+                }
             }
 
-            int totalRating = 0;
-            MyList<Double> directorRate = new MyLinkedListImpl<>();
+            if (totalRatings <= 100) continue;
 
-            for(int j = 0; j < moviesDirected.size(); j++){
+            double[] r = new double[totalRatings];
+            int index = 0;
+            for (int j = 0; j < moviesDirected.size(); j++) {
                 Movie m = system.getMovies().get(moviesDirected.get(j));
-                if(m != null){
-                    totalRating += m.getSumRate();
-                    MyList<Rating> ratingDirector = m.getMovieRatings();
-                    for(int k = 0; k < ratingDirector.size(); k++){
-                        Rating rating = ratingDirector.get(k);
-                        directorRate.add(rating.getRatingValue());
+                if (m != null) {
+                    MyList<Rating> ratings = m.getMovieRatings();
+                    for (int k = 0; k < ratings.size(); k++) {
+                        r[index++] = ratings.get(k).getRatingValue();
                     }
                 }
             }
 
-            if(totalRating <= 100){
-                continue;
-            }
-
-            double[] r = new double[directorRate.size()];
-            for(int n = 0; n < directorRate.size(); n++){
-                r[n] = directorRate.get(n);
-            }
-            Arrays.sort(r);  //optimizacion de quicksort, es in-place
-
             double mediana;
-            if (directorRate.size() % 2 == 0) {
-                mediana = (r[directorRate.size() / 2 - 1] + r[directorRate.size() / 2]) / 2.0;
+            if (totalRatings % 2 == 0) {
+                double m1 = quickSelect(r.clone(), totalRatings / 2);
+                double m2 = quickSelect(r.clone(), totalRatings / 2 + 1);
+                mediana = (m1 + m2) / 2.0;
             } else {
-                mediana = r[directorRate.size() / 2];
+                mediana = quickSelect(r.clone(), (totalRatings + 1) / 2);
             }
 
-            DirectorMediana director = new DirectorMediana(p.getName(), p.getMoviesDirigidas().size(), mediana);
-            heap.insert(director);
-
-            for(int w = 0; w < 10 && heap.size() > 0; w++){
-                DirectorMediana d = heap.delete();
-                System.out.println(d.getNombre() + "," + d.getCantidadPeliculas() + "," + d.getMediana());
-            }
-
-            long fin = System.currentTimeMillis();
-            System.out.println("Tiempo de ejecución de la consulta: " + (fin - inicio) + " ms");
+            heap.insert(new DirectorMediana(p.getName(), moviesDirected.size(), mediana));
         }
 
+        for (int i = 0; i < 10 && heap.size() > 0; i++) {
+            DirectorMediana d = heap.delete();
+            System.out.println(d.getNombre() + "," + d.getCantidadPeliculas() + "," + d.getMediana());
+        }
+
+        long fin = System.currentTimeMillis();
+        System.out.println("Tiempo de ejecución de la consulta: " + (fin - inicio) + " ms");
     }
+
+
+    private static double quickSelect(double[] array, int k) {
+        return quickSelect(array, 0, array.length - 1, k);
+    }
+
+    private static double quickSelect(double[] array, int left, int right, int k) {
+        if (left == right) return array[left];
+
+        int pivotIndex = partition(array, left, right);
+        int length = pivotIndex - left + 1;
+
+        if (k == length) return array[pivotIndex];
+        else if (k < length) return quickSelect(array, left, pivotIndex - 1, k);
+        else return quickSelect(array, pivotIndex + 1, right, k - length);
+    }
+
+    private static int partition(double[] array, int left, int right) {
+        double pivot = array[right];
+        int i = left;
+
+        for (int j = left; j < right; j++) {
+            if (array[j] <= pivot) {
+                double temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
+                i++;
+            }
+        }
+        double temp = array[i];
+        array[i] = array[right];
+        array[right] = temp;
+
+        return i;
+    }
+
 }
+

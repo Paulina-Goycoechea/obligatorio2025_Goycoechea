@@ -408,6 +408,7 @@ public class UMovieSystem {
                         Person pNueva = new Person(id, name);
                         people.put(id, pNueva);
                     }
+                    people.get(id).getMoviesDirigidas().add(movieId);
                 } catch (NumberFormatException ignored) {}
             }
         }
