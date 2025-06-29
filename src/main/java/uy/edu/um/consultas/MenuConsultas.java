@@ -38,7 +38,7 @@ public class MenuConsultas {
                     ConsultaTop5CollectionRevenue.ejecutar(system);
                     break;
                 case 4:
-                    // sistema.consultaTop10DirectoresPorMediana();
+                    ConsultaTop10Directores.ejecutar(system);
                     break;
                 case 5:
                     // sistema.consultaActorMasCalificadoPorMes();

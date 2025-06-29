@@ -9,6 +9,7 @@ import uy.edu.um.tad.linkedlist.MyLinkedListImpl;
 import uy.edu.um.tad.linkedlist.MyList;
 
 import java.io.*;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.regex.*;
 
@@ -50,7 +51,7 @@ public class UMovieSystem {
                     System.out.println("Carga de datos exitosa, tiempo de ejecución de la carga: " + (fin - inicio) + " ms");
                     //mostrarInfoPelicula(862);
                     //mostrarInfoPelicula(998);  no existe idMovie
-                    //mostrarInfoPelicula(318177); pelicula con creditos [],[],318177
+                    //mostrarInfoPelicula(318177); //pelicula con creditos [],[],318177
                     break;
                 case 2:
                     MenuConsultas menuConsultas = new MenuConsultas(this);
@@ -393,7 +394,7 @@ public class UMovieSystem {
             String job = findByKeyInString(obj, "job");
             String name = findByKeyInString(obj, "name");
 
-            if (idStr != null && !idStr.isEmpty()) {
+            if (idStr != null && !idStr.isEmpty() && Objects.equals(job, "Director") && Objects.equals(department, "Directing")) {  //solo me interesan los directores para las consultas
                 try {
                     int id = Integer.parseInt(idStr);
                     CrewMember cm = new CrewMember(id, department, job);
@@ -412,7 +413,7 @@ public class UMovieSystem {
         }
     }
 
-    /*
+
     //VERIFICAR INFO DE UNA PELI POR ID
     public void mostrarInfoPelicula(int id) {
         if (!movies.contains(id)) {
@@ -481,6 +482,6 @@ public class UMovieSystem {
             System.out.println("Promedio de valoraciones: " + String.format("%.2f", promedio) +
                     " (" + ratingList.size() + " valoraciones)");
         }
-    }*/
+    }
 }
 
