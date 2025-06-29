@@ -41,7 +41,7 @@ public class MenuConsultas {
                     ConsultaTop10Directores.ejecutar(system);
                     break;
                 case 5:
-                    // sistema.consultaActorMasCalificadoPorMes();
+                    ConsultaActorMasRatedMes.ejecutar(system);
                     break;
                 case 6:
                     // sistema.consultaUsuariosMasActivosPorGenero();
