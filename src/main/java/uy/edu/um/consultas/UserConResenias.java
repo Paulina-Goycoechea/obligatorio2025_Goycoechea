@@ -1,16 +1,16 @@
 package uy.edu.um.consultas;
 
-class UsuarioConResenias implements Comparable<UsuarioConResenias> {
+class UserConResenias implements Comparable<UserConResenias> {
     int idUsuario;
     int cantidad;
 
-    public UsuarioConResenias(int idUsuario, int cantidad) {
+    public UserConResenias(int idUsuario, int cantidad) {
         this.idUsuario = idUsuario;
         this.cantidad = cantidad;
     }
 
     @Override
-    public int compareTo(UsuarioConResenias otro) {
+    public int compareTo(UserConResenias otro) {
         return Integer.compare(otro.cantidad, this.cantidad); // orden descendente
     }
 }

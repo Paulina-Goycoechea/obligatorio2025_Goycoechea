@@ -62,13 +62,13 @@ public class ConsultaUserMasActivoPorGenero {
             GeneroConVistas top = heap.delete();
 
             MyHash<Integer, Integer> usuarios = topUsuarios.get(top.genero);
-            MyHeap<UsuarioConResenias> heap2 = new MyHeapImpl<>();
+            MyHeap<UserConResenias> heap2 = new MyHeapImpl<>();
 
             MyList<Integer> idsUsuarios = usuarios.keys();
             for (int j = 0; j < idsUsuarios.size(); j++) {
                 int id = idsUsuarios.get(j);
                 int cantidad = usuarios.get(id);
-                heap2.insert(new UsuarioConResenias(id, cantidad));
+                heap2.insert(new UserConResenias(id, cantidad));
             }
 
             // Mostrar el top K usuarios del género
@@ -76,7 +76,7 @@ public class ConsultaUserMasActivoPorGenero {
             System.out.println("Top " + k + " usuarios para el género: " + top.genero.getNameGenre());
 
             for (int n = 0; n < k && heap2.size() > 0; n++) {
-                UsuarioConResenias u = heap2.delete();
+                UserConResenias u = heap2.delete();
                 System.out.println("Usuario " + u.idUsuario + " con " + u.cantidad + " reseñas");
             }
 
