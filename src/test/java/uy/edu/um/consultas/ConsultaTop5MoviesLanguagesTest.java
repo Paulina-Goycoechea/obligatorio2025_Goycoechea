@@ -9,7 +9,7 @@ import uy.edu.um.entities.Rating;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-/*
+
 public class ConsultaTop5MoviesLanguagesTest extends TestCase {
 
     private UMovieSystem sistema;
@@ -22,7 +22,7 @@ public class ConsultaTop5MoviesLanguagesTest extends TestCase {
         Movie peli1 = new Movie(1, "Inception", "en", 0, null);
         sistema.getMovies().put(1, peli1);
         for (int i = 0; i < 3; i++) {
-            Rating r = new Rating(i, 1, 4.0, 1609459200L); // 2021-01-01
+            Rating r = new Rating(i, 1, 4.0, 1609459200L);
             sistema.getRatings().add(r);
             peli1.getMovieRatings().add(r);
             peli1.sumRate();
@@ -59,21 +59,26 @@ public class ConsultaTop5MoviesLanguagesTest extends TestCase {
 
     @Test
     public void testEjecutar() {
-        // Capturar salida
         ByteArrayOutputStream output = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
         System.setOut(new PrintStream(output));
 
         ConsultaTop5MoviesLanguages.ejecutar(sistema);
 
+        System.setOut(originalOut); // restaurar salida
+
         String salida = output.toString();
-        System.out.println("SALIDA CAPTURADA:\n" + salida);
+        System.out.println("======= SALIDA REAL =======");
+        System.out.println(salida);
+        System.out.println("===========================");
 
-        // Verificar películas esperadas por idioma
-        assertTrue(salida.contains("1,Inception,3,en"));
-        assertTrue(salida.contains("2,Interstellar,2,en"));
-        assertTrue(salida.contains("3,El Secreto de Sus Ojos,4,es"));
+        //verificar películas esperadas por idioma (formato real con espacios)
+        assertTrue(salida.contains("1, Inception, 3, en"));
+        assertTrue(salida.contains("2, Interstellar, 2, en"));
+        assertTrue(salida.contains("3, El Secreto de Sus Ojos, 4, es"));
 
-        // Verificar que película en idioma "de" (alemán) no aparezca
+        //verificar que película en idioma "de" (alemán) no aparezca
         assertFalse(salida.contains("Das Boot"));
     }
-}*/
+}
+

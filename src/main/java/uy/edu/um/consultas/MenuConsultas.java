@@ -44,7 +44,7 @@ public class MenuConsultas {
                     ConsultaActorMasRatedMes.ejecutar(system);
                     break;
                 case 6:
-                    UsuarioMasActivoPorGenero.ejecutar(system);
+                    ConsultaUserMasActivoPorGenero.ejecutar(system);
                     break;
                 case 7:
                     System.out.println("Volviendo al menú principal.");

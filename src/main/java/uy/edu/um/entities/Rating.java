@@ -21,9 +21,14 @@ public class Rating {
         this.timestamp = timestamp;
 
         LocalDateTime fecha = Instant.ofEpochSecond(timestamp)
-                .atZone(ZoneId.systemDefault())
+                .atZone(ZoneId.of("UTC"))
                 .toLocalDateTime();
         this.mes = fecha.getMonthValue();
+        /*
+        LocalDateTime fecha = Instant.ofEpochSecond(timestamp)
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+        this.mes = fecha.getMonthValue();*/
     }
 
     public int getMes() {

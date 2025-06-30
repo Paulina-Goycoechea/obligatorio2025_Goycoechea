@@ -10,7 +10,7 @@ import uy.edu.um.tad.heap.MyHeap;
 import uy.edu.um.tad.heap.MyHeapImpl;
 import uy.edu.um.tad.linkedlist.MyList;
 
-public class UsuarioMasActivoPorGenero {
+public class ConsultaUserMasActivoPorGenero {
 
     public static void ejecutar(UMovieSystem sistema) {
         long inicio = System.currentTimeMillis();

@@ -4,14 +4,13 @@ import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 import uy.edu.um.UMovieSystem;
-import uy.edu.um.entities.CastMember;
-import uy.edu.um.entities.Movie;
-import uy.edu.um.entities.Person;
-import uy.edu.um.entities.Rating;
+import uy.edu.um.entities.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-/*
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+
 public class ConsultaActorMasRatedMesTest extends TestCase {
 
     private UMovieSystem sistema;
@@ -30,23 +29,35 @@ public class ConsultaActorMasRatedMesTest extends TestCase {
         movie.addCast(cm);
         sistema.getMovies().put(100, movie);
 
-        // Crear rating en enero (timestamp equivale a enero)
-        long timestampEnero = 1577836800L; // 1 de enero de 2020
+        // Crear rating en enero (mes 1)
+        ZonedDateTime eneroUTC = ZonedDateTime.of(2020, 1, 1, 0, 0, 0, 0, ZoneId.of("UTC"));
+        long timestampEnero = eneroUTC.toEpochSecond();
+
         Rating rating = new Rating(999, 100, 5.0, timestampEnero);
         sistema.getRatings().add(rating);
+        movie.getMovieRatings().add(rating);
+        movie.sumRate();
     }
 
     @Test
     public void testEjecutar() {
-        // Capturar salida por consola
+
         ByteArrayOutputStream output = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
         System.setOut(new PrintStream(output));
 
         ConsultaActorMasRatedMes.ejecutar(sistema);
 
-        String salida = output.toString();
+        System.setOut(originalOut); // restaurar salida estándar
 
-        // Verificamos que contenga la línea esperada
+        String salida = output.toString();
+        System.out.println("======= SALIDA REAL =======");
+        System.out.println(salida);
+        System.out.println("===========================");
+
+        //verificar que contenga la línea esperada (enero = mes 1)
         assertTrue(salida.contains("1,Leonardo DiCaprio,1,1"));
     }
-}*/
+}
+
+
